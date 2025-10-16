@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtils {
 
-    @Value("")
+    @Value("${api.security.jwt.private.key}")
     private String privateKey;
 
-    @Value("")
+    @Value("${api.security.jwt.user.generator}")
     private String userGenerator;
 
     public String createToken(Authentication authentication) {
