@@ -11,6 +11,9 @@ public record UserRegistrationDto(
         @NotBlank @Size(min = 8)
         String password,
 
+        @NotBlank @Size(min = 8)
+        String confirmPassword,
+
         @NotBlank
         String name,
 
