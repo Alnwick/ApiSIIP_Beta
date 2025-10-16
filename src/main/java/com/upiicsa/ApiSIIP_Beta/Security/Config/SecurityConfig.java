@@ -1,5 +1,6 @@
 package com.upiicsa.ApiSIIP_Beta.Security.Config;
 
+import com.upiicsa.ApiSIIP_Beta.Repository.UserRepository;
 import com.upiicsa.ApiSIIP_Beta.Security.Filter.JwtTokenValidator;
 import com.upiicsa.ApiSIIP_Beta.Utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,20 @@ public class SecurityConfig {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess ->
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtTokenValidator(jwtUtils), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidator(jwtUtils, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/users/register",
-                                "api/forgot-password", "api/reset-password/**",
-                                "/users/confirm-email").permitAll()
+                        .requestMatchers("/auth/login", "api/forgot-password", "api/reset-password/**",
+                                "/students/register", "/students/confirm-email")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .build();
     }
