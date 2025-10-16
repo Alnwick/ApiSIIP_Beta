@@ -1,6 +1,7 @@
 package com.upiicsa.ApiSIIP_Beta.Service;
 
 import com.upiicsa.ApiSIIP_Beta.Dto.User.UserRegistrationDto;
+import com.upiicsa.ApiSIIP_Beta.Model.Enum.DocumentType;
 import com.upiicsa.ApiSIIP_Beta.Model.Role;
 import com.upiicsa.ApiSIIP_Beta.Model.UserSIIP;
 import com.upiicsa.ApiSIIP_Beta.Repository.RoleRepository;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -24,31 +26,25 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private EmailVerificationService  verificationService;
-
     @Transactional
     public UserSIIP registerUser(UserRegistrationDto registration) {
-        String encodedPassword = passwordEncoder.encode(registration.password());
+        if (!registration.password().equals(registration.confirmPassword()))
+            throw new IllegalArgumentException("Invalid password");
 
-        UserSIIP newUser = new UserSIIP();
-        newUser.setEmail(registration.email());
-        newUser.setPassword(encodedPassword);
-        newUser.setName(registration.name());
-        newUser.setFatherLastName(registration.fatherLastName());
-        newUser.setMotherLastName(registration.motherLastName());
-
-        Role defaultRole = roleRepository.findByRoleName("USER")
+        Role role = roleRepository.findByRoleName("OPERATIVE")
                 .orElseThrow(() -> new RuntimeException("Default Role Not Found"));
-        newUser.setRolesList(Set.of(defaultRole));
 
-        newUser.setEnabled(false);
-        newUser.setAccountNonExpired(true);
-        newUser.setAccountNonLocked(true);
-        newUser.setCredentialsNonExpired(true);
+        UserSIIP newUser = UserSIIP.builder()
+                .email(registration.email())
+                .password(passwordEncoder.encode(registration.password()))
+                .fatherLastName(registration.fatherLastName())
+                .motherLastName(registration.motherLastName())
+                .name(registration.name())
+                .enabled(true).accountNonExpired(true).accountNonLocked(true).credentialsNonExpired(true)
+                .rolesList(Set.of(role))
+                .build();
 
         userRepository.save(newUser);
-        verificationService.createAndSendConfirmationCode(newUser);
 
         return newUser;
     }
