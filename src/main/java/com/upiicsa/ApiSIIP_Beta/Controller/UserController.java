@@ -37,14 +37,4 @@ public class UserController {
         return ResponseEntity.created(location).body(
                 new RegistrationResponseDto(registeredUser, "Register User"));
     }
-
-    @PostMapping("/confirm-email")
-    public ResponseEntity<Void> confirmEmail(@RequestBody @Valid EmailConfirmationDto emailConfirmation) {
-        try{
-            verificationService.confirmEmail(emailConfirmation);
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
 }
