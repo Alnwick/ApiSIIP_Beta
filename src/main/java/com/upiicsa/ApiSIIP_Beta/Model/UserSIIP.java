@@ -6,18 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @Table(name = "usersSIIP")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class UserSIIP implements UserDetails {
@@ -46,10 +48,18 @@ public class UserSIIP implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.rolesList.stream()
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        //Add permissions
+        this.rolesList.stream()
                 .flatMap(role -> role.getPermissions().stream())
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermissionName()))
-                .collect(Collectors.toSet());
+                .forEach(authorities::add);
+        //Add roles with prefix "ROLE_"
+        this.rolesList.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleName()))
+                .forEach(authorities::add);
+
+        return authorities;
     }
 
     @Override
