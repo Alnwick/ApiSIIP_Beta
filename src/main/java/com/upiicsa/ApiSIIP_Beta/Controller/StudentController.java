@@ -1,11 +1,13 @@
 package com.upiicsa.ApiSIIP_Beta.Controller;
 
+import com.upiicsa.ApiSIIP_Beta.Dto.Document.DocumentShowForStudentDto;
 import com.upiicsa.ApiSIIP_Beta.Dto.Document.UploadDocDto;
 import com.upiicsa.ApiSIIP_Beta.Dto.Email.EmailConfirmationDto;
 import com.upiicsa.ApiSIIP_Beta.Dto.Student.ResponseRegStudentDto;
 import com.upiicsa.ApiSIIP_Beta.Dto.Student.StudentRegistrationDto;
 import com.upiicsa.ApiSIIP_Beta.Model.Student;
 import com.upiicsa.ApiSIIP_Beta.Service.DocumentService;
+import com.upiicsa.ApiSIIP_Beta.Service.DocumentationService;
 import com.upiicsa.ApiSIIP_Beta.Service.EmailVerificationService;
 import com.upiicsa.ApiSIIP_Beta.Service.StudentService;
 import com.upiicsa.ApiSIIP_Beta.Utils.AuthHelper;
@@ -19,6 +21,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/students")
@@ -32,6 +36,22 @@ public class StudentController {
 
     @Autowired
     private DocumentService documentService;
+
+    @Autowired
+    private DocumentationService documentationService;
+
+    @GetMapping("/view-my-documentation")
+    @PreAuthorize("hasAnyRole('STUDENT')")
+    public ResponseEntity<List<DocumentShowForStudentDto>> viewMyDocumentation() {
+        Long idStudent = AuthHelper.getAuthenticatedUserId();
+
+        List<DocumentShowForStudentDto> documentation = documentationService.getDocumentation(idStudent)
+                .stream()
+                .map(d -> new DocumentShowForStudentDto(d))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(documentation);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseRegStudentDto> registerUser(@RequestBody @Valid StudentRegistrationDto registrationDto) {
