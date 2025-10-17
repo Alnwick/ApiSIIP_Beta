@@ -2,10 +2,7 @@ package com.upiicsa.ApiSIIP_Beta.Model;
 
 import com.upiicsa.ApiSIIP_Beta.Model.Enum.StateDocument;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
