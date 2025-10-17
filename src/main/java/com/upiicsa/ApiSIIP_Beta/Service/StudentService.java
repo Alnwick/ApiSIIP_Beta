@@ -1,6 +1,7 @@
 package com.upiicsa.ApiSIIP_Beta.Service;
 
 import com.upiicsa.ApiSIIP_Beta.Dto.Student.StudentRegistrationDto;
+import com.upiicsa.ApiSIIP_Beta.Dto.Student.StudentShowDto;
 import com.upiicsa.ApiSIIP_Beta.Model.Document;
 import com.upiicsa.ApiSIIP_Beta.Model.Documentation;
 import com.upiicsa.ApiSIIP_Beta.Model.Enum.Career;
@@ -11,6 +12,8 @@ import com.upiicsa.ApiSIIP_Beta.Model.Student;
 import com.upiicsa.ApiSIIP_Beta.Repository.RoleRepository;
 import com.upiicsa.ApiSIIP_Beta.Repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,5 +88,11 @@ public class StudentService {
         newStudent.setDocumentation(documentation);
 
         return newStudent;
+    }
+
+    public Page<StudentShowDto> getStudents(Pageable pageable) {
+
+        return studentRepository.findByEnabledTrue(pageable)
+                .map(StudentShowDto::new);
     }
 }
