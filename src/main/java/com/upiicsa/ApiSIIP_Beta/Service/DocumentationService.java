@@ -1,6 +1,7 @@
 package com.upiicsa.ApiSIIP_Beta.Service;
 
 import com.upiicsa.ApiSIIP_Beta.Dto.Document.DocumentShowDto;
+import com.upiicsa.ApiSIIP_Beta.Model.Document;
 import com.upiicsa.ApiSIIP_Beta.Model.Documentation;
 import com.upiicsa.ApiSIIP_Beta.Model.Enum.StateDocumentation;
 import com.upiicsa.ApiSIIP_Beta.Model.Student;
@@ -31,15 +32,13 @@ public class DocumentationService {
         return documentation;
     }
 
-    public List<DocumentShowDto> getDocumentation(Long studentId) {
+    public List<Document> getDocumentation(Long studentId) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Documentation documentation = documentationRepository.findById(student.getDocumentation().getId())
                 .orElseThrow(() -> new UsernameNotFoundException("Documentation not found"));
 
-        return documentation.getDocuments().stream()
-                .map(d -> new DocumentShowDto(d))
-                .collect(Collectors.toList());
+        return documentation.getDocuments();
     }
 }
