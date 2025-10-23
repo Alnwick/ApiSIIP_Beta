@@ -1,7 +1,6 @@
 package com.upiicsa.ApiSIIP_Beta.Service;
 
 import com.upiicsa.ApiSIIP_Beta.Dto.User.UserRegistrationDto;
-import com.upiicsa.ApiSIIP_Beta.Model.Enum.DocumentType;
 import com.upiicsa.ApiSIIP_Beta.Model.Role;
 import com.upiicsa.ApiSIIP_Beta.Model.UserSIIP;
 import com.upiicsa.ApiSIIP_Beta.Repository.RoleRepository;
@@ -11,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 
 @Service

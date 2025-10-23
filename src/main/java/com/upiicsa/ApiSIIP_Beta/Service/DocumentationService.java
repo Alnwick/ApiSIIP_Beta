@@ -1,6 +1,5 @@
 package com.upiicsa.ApiSIIP_Beta.Service;
 
-import com.upiicsa.ApiSIIP_Beta.Dto.Document.DocumentShowDto;
 import com.upiicsa.ApiSIIP_Beta.Model.Document;
 import com.upiicsa.ApiSIIP_Beta.Model.Documentation;
 import com.upiicsa.ApiSIIP_Beta.Model.Enum.StateDocumentation;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DocumentationService {
