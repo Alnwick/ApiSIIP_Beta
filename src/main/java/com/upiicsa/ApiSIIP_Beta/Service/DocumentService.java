@@ -11,6 +11,8 @@ import com.upiicsa.ApiSIIP_Beta.Repository.DocumentRepository;
 import com.upiicsa.ApiSIIP_Beta.Repository.StudentRepository;
 import com.upiicsa.ApiSIIP_Beta.Repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class DocumentService {
 
     @Autowired
     private HistoryService historyService;
+
+    private static final Logger log = LoggerFactory.getLogger(DocumentService.class);
 
     private final Path fileStorageLocation = Paths.get("./uploads").toAbsolutePath().normalize();
 
@@ -104,6 +108,14 @@ public class DocumentService {
         document.setRevisionDate(LocalDateTime.now());
 
         documentRepository.save(document);
+
+        String logMessage = String.format(
+                "ACTION=PUT; Check document; DocumentId=%d; OperativeId=%d; Comment='%s'",
+                document.getIdDocument(),
+                idOperative,
+                checkDto.comment()
+        );
+        log.info(logMessage);
     }
 
     private String savedFile(MultipartFile file) throws IOException {
