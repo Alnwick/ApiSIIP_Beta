@@ -4,6 +4,7 @@ import com.upiicsa.ApiSIIP_Beta.Dto.User.RegistrationResponseDto;
 import com.upiicsa.ApiSIIP_Beta.Dto.User.UserRegistrationDto;
 import com.upiicsa.ApiSIIP_Beta.Model.UserSIIP;
 import com.upiicsa.ApiSIIP_Beta.Service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/admin")
+@SecurityRequirement(name = "bearerAuth")
 public class AdminController {
 
     @Autowired
