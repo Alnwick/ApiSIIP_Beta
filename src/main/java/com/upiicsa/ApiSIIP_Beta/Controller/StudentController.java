@@ -11,6 +11,7 @@ import com.upiicsa.ApiSIIP_Beta.Service.DocumentationService;
 import com.upiicsa.ApiSIIP_Beta.Service.EmailVerificationService;
 import com.upiicsa.ApiSIIP_Beta.Service.StudentService;
 import com.upiicsa.ApiSIIP_Beta.Utils.AuthHelper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/students")
+@SecurityRequirement(name = "bearerAuth")
 public class StudentController {
 
     @Autowired
