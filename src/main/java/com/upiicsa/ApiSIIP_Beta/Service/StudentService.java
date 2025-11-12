@@ -2,6 +2,8 @@ package com.upiicsa.ApiSIIP_Beta.Service;
 
 import com.upiicsa.ApiSIIP_Beta.Dto.Student.StudentRegistrationDto;
 import com.upiicsa.ApiSIIP_Beta.Dto.Student.StudentShowDto;
+import com.upiicsa.ApiSIIP_Beta.Exception.ResourceNotFoundException;
+import com.upiicsa.ApiSIIP_Beta.Exception.ValidationException;
 import com.upiicsa.ApiSIIP_Beta.Model.Document;
 import com.upiicsa.ApiSIIP_Beta.Model.Documentation;
 import com.upiicsa.ApiSIIP_Beta.Model.Enum.Career;
@@ -55,10 +57,10 @@ public class StudentService {
     @Transactional
     public Student registerStudent(StudentRegistrationDto registrationDto) {
         if (!registrationDto.password().equals(registrationDto.confirmPassword()))
-            throw new IllegalArgumentException("Invalid password");
+            throw new ValidationException("Invalid password");
 
         Role defaultRole = roleRepository.findByRoleName("STUDENT")
-                .orElseThrow(() -> new RuntimeException("Default Role Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Default Role Not Found"));
 
         Student newStudent = Student.builder()
                 .email(registrationDto.email())
@@ -91,7 +93,6 @@ public class StudentService {
     }
 
     public Page<StudentShowDto> getStudents(Pageable pageable) {
-
         return studentRepository.findByEnabledTrue(pageable)
                 .map(StudentShowDto::new);
     }

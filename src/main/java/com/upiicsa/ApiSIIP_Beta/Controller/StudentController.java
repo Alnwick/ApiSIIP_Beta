@@ -69,12 +69,9 @@ public class StudentController {
 
     @PostMapping("/confirm-email")
     public ResponseEntity<Void> confirmEmail(@RequestBody @Valid EmailConfirmationDto emailConfirmation) {
-        try{
-            verificationService.confirmEmail(emailConfirmation);
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(null);
-        }
+        verificationService.confirmEmail(emailConfirmation);
+
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/upload-document")

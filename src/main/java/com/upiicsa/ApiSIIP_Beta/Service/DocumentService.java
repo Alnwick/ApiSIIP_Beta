@@ -1,6 +1,7 @@
 package com.upiicsa.ApiSIIP_Beta.Service;
 
 import com.upiicsa.ApiSIIP_Beta.Dto.Document.CheckDocumentDto;
+import com.upiicsa.ApiSIIP_Beta.Exception.ResourceNotFoundException;
 import com.upiicsa.ApiSIIP_Beta.Model.Document;
 import com.upiicsa.ApiSIIP_Beta.Model.Documentation;
 import com.upiicsa.ApiSIIP_Beta.Model.Enum.DocumentType;
@@ -88,7 +89,7 @@ public class DocumentService {
 
         if(document.getDocumentation().getUserSIIP() == null){
             UserSIIP userSIIP = userRepository.findById(idOperative)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                    .orElseThrow(() -> new ResourceNotFoundException("User for ID:" + idOperative + "not found."));
 
             document.getDocumentation().setUserSIIP(userSIIP);
             document.getDocumentation().setAssignmentDate(LocalDateTime.now());

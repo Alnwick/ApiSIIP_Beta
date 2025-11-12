@@ -1,6 +1,7 @@
 package com.upiicsa.ApiSIIP_Beta.Service;
 
 import com.upiicsa.ApiSIIP_Beta.Dto.Document.DocumentShowDto;
+import com.upiicsa.ApiSIIP_Beta.Exception.ResourceNotFoundException;
 import com.upiicsa.ApiSIIP_Beta.Model.Document;
 import com.upiicsa.ApiSIIP_Beta.Model.Documentation;
 import com.upiicsa.ApiSIIP_Beta.Model.Enum.StateDocumentation;
@@ -34,10 +35,11 @@ public class DocumentationService {
 
     public List<Document> getDocumentation(Long studentId) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Student for ID: " + studentId + " not found"));
 
         Documentation documentation = documentationRepository.findById(student.getDocumentation().getId())
-                .orElseThrow(() -> new UsernameNotFoundException("Documentation not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Documentation for ID: " + student.getDocumentation().getId() + " not found"));
 
         return documentation.getDocuments();
     }
